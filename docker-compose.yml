@@ -1,0 +1,26 @@
+version: "3"
+services:
+    backend:
+        container_name: gctweet_server
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        image: anshuljangra/gctweet_server
+        ports:
+            - "3005:3005"
+        volumes:
+            - ./server:/usr/src/app/gctweet-server
+        command: 'node app'
+
+    frontend:
+        container_name: gctweet_client
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        image: anshuljangra/gctweet_client
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./client:/usr/src/app/gctweet-client
+        command: 'npm start'
+    
