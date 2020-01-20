@@ -6,6 +6,8 @@ import * as serviceWorker from './serviceWorker';
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'antd/dist/antd.css';
+
 import NavigationBar from './components/nav';
 import MapContainer from "./components/map";
 
