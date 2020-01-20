@@ -183,8 +183,7 @@ class MapContainer extends React.Component {
                   <div>
                     <input
                       style={{
-                        marginTop: "1%",
-                        // width: "98%"
+                        marginTop: "1%"
                       }}
                       {...getInputProps({
                         placeholder: "Search Places ...",
@@ -245,6 +244,7 @@ class MapContainer extends React.Component {
                   max={50}
                   onAfterChange={this.sliderOnAfterChange}
                 />
+                <h6 style={{textAlign:'center'}}>Count</h6>
               </div>
             </div>
             <button
