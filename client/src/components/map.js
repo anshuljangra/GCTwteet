@@ -145,7 +145,6 @@ class MapContainer extends React.Component {
           ]
         })
       )
-      // .then(latLng => )
       .catch(error => console.error("Error", error));
   };
 
@@ -158,66 +157,66 @@ class MapContainer extends React.Component {
         <form onSubmit={ev => this.onSubmit(ev)}>
           <div className="container">
             <div className="row">
-            <div className="col-sm" style={{ marginTop: "1%" }}>
-              <button
-                style={{ marginTop: "1%",width: "100%" }}
-                type="button"
-                className="btn btn-dark"
-                onClick={this.getCurrentLocation}
-              >
-                Current Location
-              </button>
+              <div className="col-sm" style={{ marginTop: "1%" }}>
+                <button
+                  style={{ marginTop: "1%", width: "100%" }}
+                  type="button"
+                  className="btn btn-dark"
+                  onClick={this.getCurrentLocation}
+                >
+                  Current Location
+                </button>
               </div>
               <div className="col-sm" style={{ marginTop: "1%" }}>
-              <PlacesAutocomplete
-                value={this.state.address}
-                onChange={this.handleChange}
-                onSelect={this.handleSelect}
-              >
-                {({
-                  getInputProps,
-                  suggestions,
-                  getSuggestionItemProps,
-                  loading
-                }) => (
-                  <div>
-                    <input
-                      style={{
-                        marginTop: "1%"
-                      }}
-                      {...getInputProps({
-                        placeholder: "Search Places ...",
-                        className: "location-search-input form-control"
-                      })}
-                    />
-                    <div className="autocomplete-dropdown-container">
-                      {loading && <div>Loading...</div>}
-                      {suggestions.map(suggestion => {
-                        const className = suggestion.active
-                          ? "suggestion-item--active"
-                          : "suggestion-item";
-                        // inline style for demonstration purpose
-                        const style = suggestion.active
-                          ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                          : { backgroundColor: "#ffffff", cursor: "pointer" };
-                        return (
-                          <div
-                            {...getSuggestionItemProps(suggestion, {
-                              className,
-                              style
-                            })}
-                          >
-                            <span>{suggestion.description}</span>
-                          </div>
-                        );
-                      })}
+                <PlacesAutocomplete
+                  value={this.state.address}
+                  onChange={this.handleChange}
+                  onSelect={this.handleSelect}
+                >
+                  {({
+                    getInputProps,
+                    suggestions,
+                    getSuggestionItemProps,
+                    loading
+                  }) => (
+                    <div>
+                      <input
+                        style={{
+                          marginTop: "1%"
+                        }}
+                        {...getInputProps({
+                          placeholder: "Search Places ...",
+                          className: "location-search-input form-control"
+                        })}
+                      />
+                      <div className="autocomplete-dropdown-container">
+                        {loading && <div>Loading...</div>}
+                        {suggestions.map(suggestion => {
+                          const className = suggestion.active
+                            ? "suggestion-item--active"
+                            : "suggestion-item";
+                          // inline style for demonstration purpose
+                          const style = suggestion.active
+                            ? { backgroundColor: "#fafafa", cursor: "pointer" }
+                            : { backgroundColor: "#ffffff", cursor: "pointer" };
+                          return (
+                            <div
+                              {...getSuggestionItemProps(suggestion, {
+                                className,
+                                style
+                              })}
+                            >
+                              <span>{suggestion.description}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </PlacesAutocomplete>
+                  )}
+                </PlacesAutocomplete>
               </div>
-              </div>
-              <div className="row">
+            </div>
+            <div className="row">
               <div className="col-6" style={{ marginTop: "1%" }}>
                 <Input
                   placeholder="Search Query"
@@ -244,7 +243,7 @@ class MapContainer extends React.Component {
                   max={50}
                   onAfterChange={this.sliderOnAfterChange}
                 />
-                <h6 style={{textAlign:'center'}}>Count</h6>
+                <h6 style={{ textAlign: "center" }}>Count</h6>
               </div>
             </div>
             <button
