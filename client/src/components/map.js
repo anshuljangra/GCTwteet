@@ -4,12 +4,28 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
-import { Slider, Select, Input, Spin, BackTop, Button, Icon, message } from "antd";
-
+import {
+  Slider,
+  Select,
+  Input,
+  Spin,
+  BackTop,
+  Button,
+  Icon,
+  message,
+  Card,
+  Modal,
+  Divider,
+  Comment,
+  Avatar
+} from "antd";
+import "./kanye.css";
 let key = `${process.env.REACT_APP_GOOGLE_MAPS_API}`;
-const { Option } = Select;
 
-var url_regex = new RegExp('https?:\/\/(www\.)?t\.co\/([^\s]+)', 'g');
+const { Option } = Select;
+///////////////// BACK ////////////////
+
+var url_regex = new RegExp("https?://(www.)?t.co/([^s]+)", "g");
 
 class MapContainer extends React.Component {
   constructor(props) {
@@ -19,9 +35,11 @@ class MapContainer extends React.Component {
       isLoading: false,
       query: "",
       count: "",
-      type: "",
+      type: "popular",
       address: "",
       tweet_url: [],
+      tweets_loaded: false,
+      modal_visible: false,
       markers: [
         {
           name: "Current position",
@@ -33,6 +51,7 @@ class MapContainer extends React.Component {
         }
       ]
     };
+    
   }
 
   onChange(key, event) {
@@ -43,6 +62,19 @@ class MapContainer extends React.Component {
       [key]: event.target.value
     });
   }
+
+  showModal = () => {
+    this.setState({
+      modal_visible: true
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      modal_visible: false
+    });
+  };
 
   sliderOnAfterChange = value => {
     this.setState({ count: value });
@@ -60,11 +92,12 @@ class MapContainer extends React.Component {
   };
 
   noURL = () => {
-    message.warning('Tweet link not available');
-  }
+    message.warning("Tweet link not available");
+  };
 
   onSubmit(event) {
     // var text = this.state.markers.pop(position.lat);
+
     this.setState({ isLoading: true });
     var latitude = this.state.markers[0].position.lat;
     var longitude = this.state.markers[0].position.lng;
@@ -91,7 +124,9 @@ class MapContainer extends React.Component {
       }
     })
       .then(response => response.json())
-      .then(result => this.setState({ tweets: result, isLoading: false }));
+      .then(result =>
+        this.setState({ tweets: result, isLoading: false, tweets_loaded: true })
+      );
 
     event.preventDefault();
   }
@@ -138,7 +173,6 @@ class MapContainer extends React.Component {
   handleSelect = address => {
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
-
       .then(latLng =>
         this.setState({
           address: "",
@@ -158,178 +192,243 @@ class MapContainer extends React.Component {
 
   render() {
     return (
-      <div
-        className="card mx-auto my-auto"
-        style={{ maxWidth: "50rem", width: "auto", top: "80px" }}
-      >
-        <form onSubmit={ev => this.onSubmit(ev)}>
-          <div className="container">
-            <div className="row">
-              <div className="col-sm" style={{ marginTop: "1%" }}>
-                <button
-                  style={{ marginTop: "1%", width: "100%" }}
-                  type="button"
-                  className="btn btn-dark"
-                  onClick={this.getCurrentLocation}
-                >
-                  Current Location
-                </button>
-              </div>
-              <div className="col-sm" style={{ marginTop: "1%" }}>
-                <PlacesAutocomplete
-                  value={this.state.address}
-                  onChange={this.handleChange}
-                  onSelect={this.handleSelect}
-                >
-                  {({
-                    getInputProps,
-                    suggestions,
-                    getSuggestionItemProps,
-                    loading
-                  }) => (
-                    <div>
-                      <input
-                        style={{
-                          marginTop: "1%"
-                        }}
-                        {...getInputProps({
-                          placeholder: "Search Places ...",
-                          className: "location-search-input form-control"
-                        })}
-                      />
-                      <div className="autocomplete-dropdown-container">
-                        {loading && <div>Loading...</div>}
-                        {suggestions.map(suggestion => {
-                          const className = suggestion.active
-                            ? "suggestion-item--active"
-                            : "suggestion-item";
-                          // inline style for demonstration purpose
-                          const style = suggestion.active
-                            ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                            : { backgroundColor: "#ffffff", cursor: "pointer" };
-                          return (
-                            <div
-                              {...getSuggestionItemProps(suggestion, {
-                                className,
-                                style
-                              })}
-                            >
-                              <span>{suggestion.description}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
+      <>
+        <div className="main-card">
+          <Card style={{ width: "60vw", marginTop: "15vh"}}>
+            <Card.Grid hoverable={true} style={{ width: "100%" }}>
+              <Divider>Select Location</Divider>
+
+              <form onSubmit={ev => this.onSubmit(ev)}>
+                <div className="container">
+                  <div className="row">
+                    <div className="col-sm" style={{ marginTop: "1%" }}>
+                      <button
+                        style={{ marginTop: "1%", width: "100%" }}
+                        type="button"
+                        className="btn btn-dark"
+                        onClick={this.getCurrentLocation}
+                      >
+                        Current Location
+                      </button>
                     </div>
-                  )}
-                </PlacesAutocomplete>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-6" style={{ marginTop: "1%" }}>
-                <Input
-                  placeholder="Search Query"
-                  onChange={this.inputChange}
-                  size="large"
-                />
-              </div>
-              <div className="col-sm" style={{ marginTop: "1%" }}>
-                <Select
-                  defaultValue="popular"
-                  style={{ width: 200 }}
-                  onChange={this.selectChange}
-                  size="large"
-                >
-                  <Option value="recent">Recent</Option>
-                  <Option value="mixed">Mixed</Option>
-                  <Option value="popular">Popular</Option>
-                </Select>
-              </div>
-              <div className="col-sm" style={{ marginTop: "1%" }}>
-                <Slider
-                  defaultValue={10}
-                  min={5}
-                  max={50}
-                  onAfterChange={this.sliderOnAfterChange}
-                />
-                <h6 style={{ textAlign: "center" }}>Count</h6>
-              </div>
-            </div>
-            <button
-              style={{ marginTop: "2%", marginBottom: "2%", width: "99%" }}
-              type="submit"
-              className="btn btn-dark"
-            >
-              Search Tweets
-            </button>
-            {this.state.isLoading ? (
-              <div className="d-flex justify-content-center">
-                <Spin />
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        </form>
-        {/* <button onClick={this.printState}>yay</button> */}
-        <div className="card body" style={{ padding: "31%", margin: "2%" }}>
-          <Map
-            google={this.props.google}
-            style={{
-              width: "100%",
-              height: "500px",
-              margin: "-32.4%"
-            }}
-            zoom={this.state.markers[0].zoom}
-            center={this.state.markers[0].position}
-          >
-            {this.state.markers.map((marker, index) => (
-              <Marker
-                position={marker.position}
-                draggable={true}
-                onDragend={(t, map, coord) =>
-                  this.onMarkerDragEnd(coord, index)
-                }
-                name={marker.name}
-                key={index}
-              />
-            ))}
-          </Map>
-        </div>
-        <BackTop />
-        <div className="container">
-          {this.state.tweets.map(tweet => (
-            <div className="row" key={tweet.id}>
-              <div className="col">
-                <div className="card" style={{ marginBottom: "2%" }}>
-                  <div className="media">
-                    <img
-                      src={tweet.profileImage}
-                      className="align-self-start mr-3 rounded circle"
-                      style={{ marginTop: "1%", marginLeft: "1%" }}
-                      alt="..."
-                    />
-                    <div className="media-body" style={{ marginTop: "1%" }}>
-                      <h5 className="mt-0" id={tweet.userId}>
-                        {tweet.userName}
-                      </h5>
-                      <p style={{ marginTop: "-1%", marginBottom: "1%" }}>
-                        <small className="text-muted">{tweet.screenName}</small>
-                      </p>
-                      <p>{tweet.text}</p>
-                      {/* <p style={{color: 'green'}}>{url_regex.match(tweet.text)}</p> */}
-                      {String(tweet.text).match(url_regex) ? (
-                        <Button type="primary" style={{marginBottom: '2%'}} href={String(tweet.text).match(url_regex)} target="_blank">View Tweet</Button>
-                      ):(<Icon type="exclamation-circle" style={{fontSize: '1.5rem', marginBottom: '2%', color:'#ffe58f'}} onClick={this.noURL}/>)}
-                      
-                      
+                    <div className="col-sm" style={{ marginTop: "1%" }}>
+                      <PlacesAutocomplete
+                        value={this.state.address}
+                        onChange={this.handleChange}
+                        onSelect={this.handleSelect}
+                      >
+                        {({
+                          getInputProps,
+                          suggestions,
+                          getSuggestionItemProps,
+                          loading
+                        }) => (
+                          <div>
+                            <input
+                              style={{
+                                marginTop: "1%"
+                              }}
+                              {...getInputProps({
+                                placeholder: "Search Places ...",
+                                className: "location-search-input form-control"
+                              })}
+                            />
+                            <div className="autocomplete-dropdown-container">
+                              {loading && <div>Loading...</div>}
+                              {suggestions.map(suggestion => {
+                                const className = suggestion.active
+                                  ? "suggestion-item--active"
+                                  : "suggestion-item";
+                                // inline style for demonstration purpose
+                                const style = suggestion.active
+                                  ? {
+                                      backgroundColor: "#fafafa",
+                                      cursor: "pointer"
+                                    }
+                                  : {
+                                      backgroundColor: "#ffffff",
+                                      cursor: "pointer"
+                                    };
+                                return (
+                                  <div
+                                    {...getSuggestionItemProps(suggestion, {
+                                      className,
+                                      style
+                                    })}
+                                  >
+                                    <span>{suggestion.description}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </PlacesAutocomplete>
+                    </div>
+
+                    <div className="col-sm" style={{ marginTop: "1%" }}>
+                      <button
+                        style={{ marginTop: "1%", width: "100%" }}
+                        type="button"
+                        className="btn btn-dark"
+                        onClick={this.showModal}
+                      >
+                        Select on Map
+                      </button>
                     </div>
                   </div>
+
+                  <Divider style={{ marginTop: "8%" }}>
+                    Enter Search Query{" "}
+                  </Divider>
+                  <div className="row">
+                    <div className="col-sm" style={{ marginTop: "1%" }}>
+                      <Input
+                        placeholder="Search Query"
+                        onChange={this.inputChange}
+                        size="large"
+                      />
+                    </div>
+                    <div className="col-sm" style={{ marginTop: "1%" }}>
+                      <Select
+                        defaultValue="popular"
+                        style={{ width: 200 }}
+                        onChange={this.selectChange}
+                        size="large"
+                      >
+                        <Option value="recent">Recent</Option>
+                        <Option value="mixed">Mixed</Option>
+                        <Option value="popular">Popular</Option>
+                      </Select>
+                    </div>
+                    <div className="col-sm" style={{ marginTop: "1%" }}>
+                      <Slider
+                        defaultValue={10}
+                        min={5}
+                        max={50}
+                        onAfterChange={this.sliderOnAfterChange}
+                      />
+                      <h6 style={{ textAlign: "center" }}>Count</h6>
+                    </div>
+                  </div>
+                  <button
+                    style={{
+                      marginTop: "2%",
+                      marginBottom: "2%",
+                      width: "99%"
+                    }}
+                    type="submit"
+                    className="btn btn-dark"
+                  >
+                    Search Tweets
+                  </button>
+                  {this.state.isLoading ? (
+                    <div className="d-flex justify-content-center">
+                      <Spin />
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
-              </div>
+              </form>
+            </Card.Grid>
+            {/* <button onClick={this.printState}>yay</button> */}
+
+            <div>
+              <Modal
+                title="Map"
+                visible={this.state.modal_visible}
+                onOk={this.handleOk}
+                bodyStyle={{ height: "65vh" }}
+                afterClose={this.handleOk}
+                onCancel={this.handleOk}
+              >
+                <Map
+                  google={this.props.google}
+                  style={{
+                    width: "90%",
+                    height: "550px"
+                  }}
+                  zoom={this.state.markers[0].zoom}
+                  center={this.state.markers[0].position}
+                >
+                  {this.state.markers.map((marker, index) => (
+                    <Marker
+                      position={marker.position}
+                      draggable={true}
+                      onDragend={(t, map, coord) =>
+                        this.onMarkerDragEnd(coord, index)
+                      }
+                      name={marker.name}
+                      key={index}
+                    />
+                  ))}
+                </Map>
+              </Modal>
             </div>
-          ))}
+
+            <BackTop />
+          </Card>
+          {this.state.tweets_loaded ? (
+            <Card
+              style={{
+                width: "60vw",
+                maxHeight: "80vh",
+                marginTop: "2%",
+                overflow: "auto",
+                marginBottom: "2%"
+              }}
+            >
+              <Card.Grid hoverable={true} style={{ width: "100%" }}>
+                <div className="container">
+                  {this.state.tweets.map(tweet => (
+                    <div className="row" key={tweet.id}>
+                      <div className="col">
+                        <Card.Grid
+                          hoverable={true}
+                          style={{ width: "100%", marginBottom: "2%" }}
+                        >
+                          <Comment
+                            author={<a>{tweet.userName}</a>}
+                            avatar={
+                              <Avatar src={tweet.profileImage} alt="..." />
+                            }
+                            content={<p>{tweet.text}</p>}
+                            datetime={tweet.screenName}
+                          >
+                            {String(tweet.text).match(url_regex) ? (
+                              <Button
+                                type="primary"
+                                href={String(tweet.text).match(url_regex)}
+                                target="_blank"
+                              >
+                                View Tweet
+                              </Button>
+                            ) : (
+                              <Icon
+                                type="exclamation-circle"
+                                style={{
+                                  fontSize: "1.5rem",
+                                  marginBottom: "2%",
+                                  color: "#ffe58f"
+                                }}
+                                onClick={this.noURL}
+                              />
+                            )}
+                          </Comment>
+                        </Card.Grid>
+                        {/*  */}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card.Grid>
+            </Card>
+          ) : (
+            ""
+          )}
         </div>
-      </div>
+      </>
     );
   }
 }
