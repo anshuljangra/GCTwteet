@@ -4,10 +4,12 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
-import { Slider, Select, Input, Spin } from "antd";
+import { Slider, Select, Input, Spin, BackTop, Button, Icon, message } from "antd";
 
 let key = `${process.env.REACT_APP_GOOGLE_MAPS_API}`;
 const { Option } = Select;
+
+var url_regex = new RegExp('https?:\/\/(www\.)?t\.co\/([^\s]+)', 'g');
 
 class MapContainer extends React.Component {
   constructor(props) {
@@ -19,6 +21,7 @@ class MapContainer extends React.Component {
       count: "",
       type: "",
       address: "",
+      tweet_url: [],
       markers: [
         {
           name: "Current position",
@@ -53,8 +56,13 @@ class MapContainer extends React.Component {
 
   inputChange = value => {
     this.setState({ query: value });
-    console.log("query: ", value);
+    // console.log("query: ", value);
   };
+
+  noURL = () => {
+    message.warning('Tweet link not available');
+  }
+
   onSubmit(event) {
     // var text = this.state.markers.pop(position.lat);
     this.setState({ isLoading: true });
@@ -287,7 +295,7 @@ class MapContainer extends React.Component {
             ))}
           </Map>
         </div>
-
+        <BackTop />
         <div className="container">
           {this.state.tweets.map(tweet => (
             <div className="row" key={tweet.id}>
@@ -304,13 +312,16 @@ class MapContainer extends React.Component {
                       <h5 className="mt-0" id={tweet.userId}>
                         {tweet.userName}
                       </h5>
-                      <p
-                        className=""
-                        style={{ marginTop: "-1%", marginBottom: "1%" }}
-                      >
+                      <p style={{ marginTop: "-1%", marginBottom: "1%" }}>
                         <small className="text-muted">{tweet.screenName}</small>
                       </p>
                       <p>{tweet.text}</p>
+                      {/* <p style={{color: 'green'}}>{url_regex.match(tweet.text)}</p> */}
+                      {String(tweet.text).match(url_regex) ? (
+                        <Button type="primary" style={{marginBottom: '2%'}} href={String(tweet.text).match(url_regex)} target="_blank">View Tweet</Button>
+                      ):(<Icon type="exclamation-circle" style={{fontSize: '1.5rem', marginBottom: '2%', color:'#ffe58f'}} onClick={this.noURL}/>)}
+                      
+                      
                     </div>
                   </div>
                 </div>

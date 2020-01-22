@@ -12,9 +12,9 @@ import NavigationBar from './components/nav';
 import MapContainer from "./components/map";
 
 
-ReactDOM.render(<BrowserRouter><NavigationBar /></BrowserRouter>, document.getElementById('root'));
-ReactDOM.render(<MapContainer/>, document.getElementById('root'));
 
+ReactDOM.render(<MapContainer/>, document.getElementById('root'));
+ReactDOM.render(<BrowserRouter><NavigationBar /></BrowserRouter>, document.getElementById('root'));
 
 
 // If you want your app to work offline and load faster, you can change

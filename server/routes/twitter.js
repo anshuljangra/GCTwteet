@@ -28,6 +28,7 @@ router.get('/search', (req, res) => {
         });
 
         res.json(tweetData);
+        console.log(tweetData);
         } else {
         console.log(err);
         }
