@@ -22,9 +22,22 @@
     }
 }
 
-.main-card{
+.secondary-card{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.main-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.info-card{
+    margin-top:15vh;
+    margin-left: 1%;
+    text-align: center;
+
 }
