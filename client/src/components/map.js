@@ -204,14 +204,14 @@ class MapContainer extends React.Component {
                   <div className="container">
                     <div className="row">
                       <div className="col-sm" style={{ marginTop: "1%" }}>
-                        <button
+                        <Button
                           style={{ marginTop: "1%", width: "100%" }}
-                          type="button"
-                          className="btn btn-dark"
+                          size='large'
                           onClick={this.getCurrentLocation}
+                          type='primary'
                         >
                           Current Location
-                        </button>
+                        </Button>
                       </div>
                       <div className="col-sm" style={{ marginTop: "1%" }}>
                         <PlacesAutocomplete
@@ -270,14 +270,14 @@ class MapContainer extends React.Component {
                       </div>
 
                       <div className="col-sm" style={{ marginTop: "1%" }}>
-                        <button
+                        <Button
                           style={{ marginTop: "1%", width: "100%" }}
-                          type="button"
-                          className="btn btn-dark"
+                          type="primary"
                           onClick={this.showModal}
+                          size='large'
                         >
                           Select on Map
-                        </button>
+                        </Button>
                       </div>
                     </div>
 
@@ -319,10 +319,12 @@ class MapContainer extends React.Component {
                       style={{
                         marginTop: "2%",
                         marginBottom: "2%",
-                        width: "99%"
+                        width: "99%",
+                        backgroundColor:'#1890ff',
+                        color:'white'
                       }}
                       type="submit"
-                      className="btn btn-dark"
+                      className="btn"
                     >
                       Search Tweets
                     </button>
