@@ -339,7 +339,7 @@ class MapContainer extends React.Component {
                 title="Map"
                 visible={this.state.modal_visible}
                 onOk={this.handleOk}
-                bodyStyle={{ height: "65vh" }}
+                bodyStyle={{ height: "70vh", maxHeight:'600px' }}
                 afterClose={this.handleOk}
                 onCancel={this.handleOk}
               >
@@ -347,7 +347,8 @@ class MapContainer extends React.Component {
                   google={this.props.google}
                   style={{
                     width: "90%",
-                    height: "550px"
+                    height: "65vh",
+                    maxHeight:'550px'
                   }}
                   zoom={this.state.markers[0].zoom}
                   center={this.state.markers[0].position}
