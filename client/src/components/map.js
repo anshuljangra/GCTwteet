@@ -85,9 +85,9 @@ class MapContainer extends React.Component {
     console.log("Type: ", value);
   };
 
-  inputChange = value => {
-    this.setState({ query: value });
-    // console.log("query: ", value);
+  inputChange = (e) => {
+    this.setState({ query: e.target.value });
+    console.log("query: ", e.target.value);
   };
 
   noURL = () => {
@@ -282,7 +282,7 @@ class MapContainer extends React.Component {
                     </div>
 
                     <Divider style={{ marginTop: "8%" }}>
-                      Enter Search Query{" "}
+                      Enter Search Query
                     </Divider>
                     <div className="row">
                       <div className="col-sm" style={{ marginTop: "1%" }}>
