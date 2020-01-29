@@ -25,7 +25,7 @@ let key = `${process.env.REACT_APP_GOOGLE_MAPS_API}`;
 const { Option } = Select;
 ///////////////// BACK ////////////////
 
-var url_regex = new RegExp("https?://(www.)?t.co/([^s]+)", "g");
+var url_regex = new RegExp("https?://(www.)?t.co/([^s]+ )", "g");
 
 class MapContainer extends React.Component {
   constructor(props) {
@@ -87,7 +87,7 @@ class MapContainer extends React.Component {
 
   inputChange = (e) => {
     this.setState({ query: e.target.value });
-    console.log("query: ", e.target.value);
+    // console.log("query: ", e.target.value);
   };
 
   noURL = () => {
@@ -400,8 +400,9 @@ class MapContainer extends React.Component {
                               avatar={
                                 <Avatar src={tweet.profileImage} alt="..." />
                               }
-                              content={<p>{tweet.text}</p>}
+                            content={<><p>{tweet.text}</p><br/> {tweet.location ? (<p><strong>Tweet Location: </strong>{tweet.location}</p>): (<p><strong>Tweet Location: </strong>Location not available due to API limitations</p>)}</>}
                               datetime={tweet.screenName}
+                              
                             >
                               {String(tweet.text).match(url_regex) ? (
                                 <Button
