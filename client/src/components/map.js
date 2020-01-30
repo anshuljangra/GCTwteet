@@ -85,7 +85,7 @@ class MapContainer extends React.Component {
     console.log("Type: ", value);
   };
 
-  inputChange = (e) => {
+  inputChange = e => {
     this.setState({ query: e.target.value });
     // console.log("query: ", e.target.value);
   };
@@ -198,7 +198,7 @@ class MapContainer extends React.Component {
           <div className="secondary-card">
             <Card style={{ width: "60vw", marginTop: "15vh" }}>
               <Card.Grid hoverable={true} style={{ width: "100%" }}>
-                <Divider>Select Location</Divider>
+                <Divider><h2 className="divider-heading">Select Location</h2></Divider>
 
                 <form onSubmit={ev => this.onSubmit(ev)}>
                   <div className="container">
@@ -206,9 +206,9 @@ class MapContainer extends React.Component {
                       <div className="col-sm" style={{ marginTop: "1%" }}>
                         <Button
                           style={{ marginTop: "1%", width: "100%" }}
-                          size='large'
+                          size="large"
                           onClick={this.getCurrentLocation}
-                          type='primary'
+                          type="primary"
                         >
                           Current Location
                         </Button>
@@ -274,7 +274,7 @@ class MapContainer extends React.Component {
                           style={{ marginTop: "1%", width: "100%" }}
                           type="primary"
                           onClick={this.showModal}
-                          size='large'
+                          size="large"
                         >
                           Select on Map
                         </Button>
@@ -282,7 +282,7 @@ class MapContainer extends React.Component {
                     </div>
 
                     <Divider style={{ marginTop: "8%" }}>
-                      Enter Search Query
+                      <h2 className="divider-heading">Enter Search Query</h2>
                     </Divider>
                     <div className="row">
                       <div className="col-sm" style={{ marginTop: "1%" }}>
@@ -320,8 +320,8 @@ class MapContainer extends React.Component {
                         marginTop: "2%",
                         marginBottom: "2%",
                         width: "99%",
-                        backgroundColor:'#1890ff',
-                        color:'white'
+                        backgroundColor: "#1890ff",
+                        color: "white"
                       }}
                       type="submit"
                       className="btn"
@@ -400,9 +400,25 @@ class MapContainer extends React.Component {
                               avatar={
                                 <Avatar src={tweet.profileImage} alt="..." />
                               }
-                            content={<><p>{tweet.text}</p><br/> {tweet.location ? (<p><strong>Tweet Location: </strong>{tweet.location}</p>): (<p><strong>Tweet Location: </strong>Location not available due to API limitations</p>)}</>}
-                              datetime={tweet.screenName}
                               
+                              content={
+                                <>
+                                  <p>{tweet.text}</p>
+                                  <br />{" "}
+                                  {tweet.location ? (
+                                    <p>
+                                      <strong>Tweet Location: </strong>
+                                      {tweet.location}
+                                    </p>
+                                  ) : (
+                                    <p>
+                                      <strong>Tweet Location: </strong>Location
+                                      not available due to API limitations
+                                    </p>
+                                  )}
+                                </>
+                              }
+                              datetime={tweet.screenName}
                             >
                               {String(tweet.text).match(url_regex) ? (
                                 <Button
@@ -438,8 +454,8 @@ class MapContainer extends React.Component {
           </div>
           <div className="info-card">
             <Card hoverable={true}>
-              <Divider>Selected Coordinates</Divider>
-              <strong>Latitude: </strong>
+              <Divider><h4 className="divider-heading">Selected Coordinates</h4></Divider>
+              <strong >Latitude: </strong>
               {String(this.state.markers[0].position.lat).substring(0, 9)}
               <br />
               <strong>Latitude: </strong>
