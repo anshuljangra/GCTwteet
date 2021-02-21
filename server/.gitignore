@@ -2,7 +2,7 @@
 
 #env
 .env
-
+details.txt
 # dependencies
 /node_modules
 /.pnp
